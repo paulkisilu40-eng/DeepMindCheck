@@ -3,7 +3,7 @@ services:
     name: deepmindcheck
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python DeepMindCheck/manage.py collectstatic --noinput && python DeepMindCheck/manage.py migrate && cd DeepMindCheck && gunicorn deepmindcheck.wsgi:application
+    startCommand: cd DeepMindCheck && python manage.py collectstatic --noinput && python manage.py migrate && gunicorn deepmindcheck.wsgi:application
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -17,6 +17,7 @@ services:
         fromDatabase:
           name: deepmindcheck-db
           property: connectionString
+
 databases:
   - name: deepmindcheck-db
     databaseName: deepmindcheck
