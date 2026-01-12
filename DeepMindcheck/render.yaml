@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: deepmindcheck
+    name: Deepmindcheck
     runtime: python
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
     startCommand: python manage.py migrate && gunicorn deepmindcheck.wsgi:application --bind 0.0.0.0:$PORT
