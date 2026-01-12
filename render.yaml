@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: deepmindcheck
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python DeepMindCheck/manage.py collectstatic --noinput && python DeepMindCheck/manage.py migrate && cd DeepMindCheck && gunicorn deepmindcheck.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: DISABLE_COLLECTSTATIC
+        value: "1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: deepmindcheck-db
+          property: connectionString
+
+databases:
+  - name: deepmindcheck-db
+    databaseName: deepmindcheck
+    user: deepmindcheck
+    plan: free
