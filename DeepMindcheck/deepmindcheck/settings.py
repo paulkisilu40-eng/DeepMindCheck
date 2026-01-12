@@ -27,6 +27,7 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
     '.railway.app',
     '.up.railway.app'
+    '.onrender.com', 
 ]
 
 # ============================================================
