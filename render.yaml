@@ -2,7 +2,8 @@ services:
   - type: web
     name: deepmindcheck
     runtime: python
-    buildCommand: pip install -r requirements.txt && cd DeepMindCheck && python manage.py collectstatic --noinput
+    # buildCommand: pip install -r requirements.txt && cd DeepMindCheck && python manage.py collectstatic --noinput
+    buildCommand: pip install -r requirements.txt && python DeepMindCheck/manage.py collectstatic --noinput
     startCommand: cd DeepMindCheck && python manage.py migrate && gunicorn deepmindcheck.wsgi:application
     envVars:
       - key: SECRET_KEY
