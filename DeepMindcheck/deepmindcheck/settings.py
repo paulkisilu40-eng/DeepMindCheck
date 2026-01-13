@@ -26,8 +26,9 @@ ALLOWED_HOSTS = [
     '0.0.0.0',
     '.herokuapp.com',
     '.railway.app',
-    '.up.railway.app'
-    '.onrender.com', 
+    '.up.railway.app',
+    '.onrender.com',
+    'deepmindcheck.onrender.com',
 ]
 
 # ============================================================
