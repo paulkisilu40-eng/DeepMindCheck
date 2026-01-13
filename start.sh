@@ -5,9 +5,9 @@ if [ -f "manage.py" ]; then
     python manage.py collectstatic --noinput
     python manage.py migrate
     gunicorn deepmindcheck.wsgi:application
-elif [ -f "DeepMindCheck/manage.py" ]; then
-    echo "Found manage.py in DeepMindCheck subdirectory"
-    cd DeepMindCheck
+elif [ -f "DeepMindcheck/manage.py" ]; then
+    echo "Found manage.py in DeepMindcheck subdirectory"
+    cd DeepMindcheck
     python manage.py collectstatic --noinput
     python manage.py migrate
     gunicorn deepmindcheck.wsgi:application
