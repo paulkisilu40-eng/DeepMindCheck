@@ -9,8 +9,10 @@
     
     <title>{% block title %}DeepMindCheck - AI Mental Health Analysis{% endblock %}</title>
     
+    {% load static %}
+    
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
     
     <!-- External CSS Libraries -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
@@ -19,7 +21,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     
     <!-- Custom CSS -->
-    {% load static %}
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
     
     {% block extra_css %}{% endblock %}
