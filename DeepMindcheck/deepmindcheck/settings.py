@@ -211,6 +211,16 @@ LOGGING = {
 }
 
 # ============================================================
+# ML MODEL SETTINGS
+# ============================================================
+ML_MODELS_DIR = BASE_DIR / 'ml_models'
+HUGGINGFACE_MODEL = 'AladeenPaul/distil_bert'
+
+# Create ml_models directory if it doesn't exist
+os.makedirs(ML_MODELS_DIR, exist_ok=True)
+
+
+# ============================================================
 # CUSTOM PROJECT SETTINGS
 # ============================================================
 PROJECT_NAME = "DeepMindCheck"
