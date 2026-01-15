@@ -1,15 +1,425 @@
+
+
+{% extends 'base/base.html' %} {% load static %} {% block title %}Text Analysis - DeepMindCheck{% endblock %} {% block extra_css %} <style> :root { --awareness-red: #ef4444; --awareness-orange: #f97316; --caution-yellow: #fbbf24; --hope-green: #10b981; --calm-teal:
+
+pasted
+
+
+{% extends 'base/base.html' %} {% load static %} {% block title %}DeepMindCheck - AI-Powered Mental Health Analysis{% endblock %} {% block extra_css %} <style> .hero-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8rem 0 6rem;
+
+pasted
+
+
+{% extends 'base/base.html' %} {% load static %} {% block title %}Contact Us - DeepMindCheck{% endblock %} {% block content %} <div class="container py-5"> <div class="row justify-content-center"> <div class="col-lg-8"> <div class="text-center mb-5">
+
+pasted
+
+
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta name="description" content="DeepMindCheck - AI-Powered Mental Health Text Analysis Platform"> <meta name="keywords" content="mental heal
+
+pasted
+
+
+/* ============================================================ DEEPMINDCHECK - MAIN STYLESHEET Professional Mental Health Analysis Platform ============================================================ */ /* ============================================================ ROOT VARIA
+
+pasted
+
+
+from django.utils import timezone from django.shortcuts import render, redirect from django.http import HttpResponse, JsonResponse from django.contrib import messages from django.views.decorators.cache import cache_page from django.utils.decorators import method_decorator from django.views.g
+
+pasted
+
+I have my django app for detecting mental health states loaded with bert models that distill_bert. I have github loaded with baseline models and advanced that is distill_bert and ensemble. A user choooses either. Thats is already done but I am now focusing on value added to my users. I had already came up with some, will be revealed by the one I sent. Come up with one very useful and we can implement now. Let it not be on just one page the focus should be on the solution after detection. You can ask for clarity but first finish up on this analyze page that I will share as no 1. It should guide the solution you offer.  <div><br class="Apple-interchange-newline">// DeepMindCheck - Main JavaScript<br>console.log('DeepMindCheck loaded successfully');<br><br>// Smooth scroll for anchor links<br>document.querySelectorAll('a[href^="#"]').forEach(anchor => {<br>    anchor.addEventListener('click', function (e) {<br>        e.preventDefault();<br>        const target = document.querySelector(this.getAttribute('href'));<br>        if (target) {<br>            target.scrollIntoView({<br>                behavior: 'smooth',<br>                block: 'start'<br>            });<br>        }<br>    });<br>});<br><br>// Add active class to current nav item<br>const currentLocation = window.location.pathname;<br>document.querySelectorAll('.nav-link').forEach(link => {<br>    if (link.getAttribute('href') === currentLocation) {<br>        link.classList.add('active');<br>    }<br>});</div>                                                                                                                                                                                                                                                      
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('', views.home_view, name='home'),
+    path('analyze/', views.analyze_view, name='analyze'),
+    path('about/', views.about_view, name='about'),
+    path('contact/', views.contact_view, name='contact'),
+    path('test/', views.test_view, name='test'),
+]
+
+Show more
+10:01 AM
+I'll help you create a valuable solution focused on post-detection actionable support. Let me first complete the analyze page, then propose a comprehensive value-added feature.
+
+Completing the Analyze Page JavaScript
+analyze.js - Complete Analysis Page Logic
+Code 
+🎯 VALUE-ADDED SOLUTION: Personalized 7-Day Wellness Action Plan
+Based on analyzing your code, I propose a comprehensive, personalized Wellness Action Plan system that bridges the gap between detection and recovery. Here's why this is valuable:
+
+The Problem You're Solving:
+Students get a diagnosis but don't know what to do next
+Generic advice doesn't account for their specific situation (exams, assignments, social life)
+No follow-through or accountability after the initial check
+The Solution: Dynamic Wellness Action Plans
+This creates a complete journey from detection → action → recovery tracking:
+
+Personalized 7-Day Plans based on:
+Mental state detected (anxiety/depression/neutral)
+Confidence level of prediction
+Student context (exams, assignments, social situations)
+Time availability
+Daily Actionable Tasks with:
+Morning routines
+Study strategies
+Wellness breaks
+Evening wind-down
+Progress tracking
+Smart Features:
+PDF export for offline use
+Daily reminders (optional)
+Progress tracking with mood check-ins
+Adaptive plans that adjust based on progress
+Implementation Overview:
+I'll create:
+
+Wellness Plan Page (wellness_plan.html) - The main action plan interface
+Plan Generator Backend (wellness_plans.py) - Intelligent plan creation
+Updated Views - New URL routes and logic
+Model Extensions - Store plans and track progress
+Would you like me to implement this complete solution? It will include:
+
+✅ Beautiful, interactive wellness plan interface
+✅ Evidence-based activities tailored to each mental state
+✅ Student-specific accommodations (study schedules, deadlines)
+✅ Progress tracking and mood journaling
+✅ PDF export functionality
+✅ Integration with your existing analysis system
+This transforms your app from a "diagnostic tool" into a "recovery companion" - which is far more valuable to students!
+
+Shall I proceed with the full implementation?
+
+yes please
+
+10:05 AM
+wellness_plan.html - Personalized Wellness Action Plan
+Code 
+before you continue that was analyze.html and it was extending base html
+
+10:06 AM
+You're absolutely right! Let me fix that. The wellness plan should be a separate new page. Let me create the complete wellness plan system properly:
+
+wellness_plan.html - Personalized Wellness Action Plan
+Code ∙ Version 2 
+Now let me create the backend logic for generating wellness plans:
+
+wellness_plans.py - Wellness Plan Generator Logic
+Code 
+Continue
+
+10:10 AM
+wellness_plans.py - Wellness Plan Generator Logic
+Code ∙ Version 2 
+Now let me create the views to integrate this with your Django app:
+
+Updated views.py - Add Wellness Plan Views
+Code 
+Now let me create the updated URL configuration:
+
+Updated urls.py - Add Wellness Plan Routes
+Code 
+Perfect! Now let me create an optional database model for tracking wellness plans (you can add this later if you want server-side tracking):
+
+models.py - Optional Wellness Plan Models
+Code 
+Finally, let me create a quick implementation guide:
+
+IMPLEMENTATION_GUIDE.md - How to Set Up Wellness Plans
+Document 
+Perfect! Now let me create one final piece - updating the navigation in base.html to include the wellness plan link:
+
+Updated Navigation - Add Wellness Plan to Menu
+Code 
+🎉 Complete! Here's What You Now Have:
+Personalized 7-Day Wellness Action Plan System
+This is a game-changing value-add for your users because it:
+
+✨ Why This Is Incredibly Valuable:
+Bridges the Action Gap
+Most mental health apps: "You have depression" ❌
+Your app: "You have depression → Here's your personalized 7-day recovery plan" ✅
+Evidence-Based & Student-Specific
+21 activities per mental state (63 total unique activities)
+Based on CBT, Behavioral Activation, ACT therapy
+Tailored for student life (study tips, office hours, campus resources)
+Complete User Journey
+   Detection → Action Plan → Progress Tracking → Recovery
+Engagement & Retention
+Users return daily to check off activities
+Progress tracking shows improvement
+Mood journaling provides data
+7-day streak system creates habit
+📦 What You Got:
+wellness_plan.html - Beautiful, interactive 7-day plan interface
+wellness_plans.py - Intelligent plan generator with 63 evidence-based activities
+analyze.js - Updated with "Get Wellness Plan" button integration
+Updated views.py - Three new views for wellness functionality
+Updated urls.py - New routes
+Optional models.py - Database tracking (if you want it)
+IMPLEMENTATION_GUIDE.md - Complete setup instructions
+🚀 Key Features:
+✅ Different plans for depression, anxiety, and wellness maintenance
+✅ Interactive daily plans with expandable activities
+✅ Checkbox tracking with celebration animations
+✅ Progress ring showing % completion
+✅ Mood tracking with emoji selector
+✅ Streak counter for motivation
+✅ Quick tips sidebar
+✅ Crisis resources always visible
+✅ PDF export capability
+✅ Social sharing of progress
+✅ LocalStorage for privacy (works offline)
+✅ Mobile-responsive design
+💪 Competitive Advantage:
+Most mental health apps stop at detection. You now provide:
+
+Actionable roadmap (not just diagnosis)
+Student-specific activities
+Progress tracking (shows it's working)
+Science-backed interventions
+Complete in browser (privacy-first)
+This turns your app from a "cool AI demo" into a genuine wellness companion that students will use daily for a week, building real habits and seeing real improvement!
+
+Want me to add any specific features or modify the activities for your student population?
+
+
+
+c
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+Pasted content
+30.09 KB •737 lines
+Formatting may be inconsistent from source
 {% extends 'base/base.html' %}
 {% load static %}
 
 {% block title %}Text Analysis - DeepMindCheck{% endblock %}
+
+{% block extra_css %}
+<style>
+:root {
+    --awareness-red: #ef4444;
+    --awareness-orange: #f97316;
+    --caution-yellow: #fbbf24;
+    --hope-green: #10b981;
+    --calm-teal: #14b8a6;
+    --peace-blue: #3b82f6;
+    --trust-purple: #8b5cf6;
+    --neutral-slate: #64748b;
+}
+
+.crisis-banner {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    border-left: 6px solid #991b1b;
+    animation: pulseAlert 2s ease-in-out infinite;
+}
+
+@keyframes pulseAlert {
+    0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.6); }
+}
+
+.result-card.result-depression {
+    border-left: 5px solid var(--awareness-orange);
+    background: linear-gradient(to right, #fff7ed 0%, #ffffff 100%);
+}
+
+.result-card.result-anxiety {
+    border-left: 5px solid var(--caution-yellow);
+    background: linear-gradient(to right, #fefce8 0%, #ffffff 100%);
+}
+
+.result-card.result-neutral {
+    border-left: 5px solid var(--hope-green);
+    background: linear-gradient(to right, #f0fdf4 0%, #ffffff 100%);
+}
+
+.quick-action-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 12px;
+    background: white;
+    border: 2px solid transparent;
+}
+
+.quick-action-card.depression {
+    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+    border-color: var(--awareness-orange);
+}
+
+.quick-action-card.anxiety {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-color: var(--peace-blue);
+}
+
+.quick-action-card.neutral {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-color: var(--hope-green);
+}
+
+.quick-action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.wellness-tool {
+    background: linear-gradient(135deg, #e0e7ff 0%, #ffffff 100%);
+    border-radius: 16px;
+    border: 2px solid var(--trust-purple);
+}
+
+.breathing-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--calm-teal), var(--peace-blue));
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+}
+
+.breathing-circle.inhale {
+    animation: breatheIn 4s ease-in-out;
+}
+
+.breathing-circle.hold {
+    animation: breatheHold 4s ease-in-out;
+}
+
+.breathing-circle.exhale {
+    animation: breatheOut 4s ease-in-out;
+}
+
+@keyframes breatheIn {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1.3); }
+}
+
+@keyframes breatheHold {
+    0%, 100% { transform: scale(1.3); }
+}
+
+@keyframes breatheOut {
+    0% { transform: scale(1.3); }
+    50% { transform: scale(1); }
+    100% { transform: scale(1); }
+}
+
+.recommendation-card {
+    background: white;
+    border-left: 4px solid var(--hope-green);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.recommendation-card:hover {
+    background: #f0fdf4;
+    transform: translateX(5px);
+}
+
+.study-tip-card {
+    background: linear-gradient(135deg, #fef3c7 0%, #ffffff 100%);
+    border-left: 4px solid var(--caution-yellow);
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+}
+
+.confidence-bar {
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease;
+}
+
+.confidence-fill.high {
+    background: linear-gradient(90deg, var(--hope-green), var(--calm-teal));
+}
+
+.confidence-fill.medium {
+    background: linear-gradient(90deg, var(--caution-yellow), var(--awareness-orange));
+}
+
+.confidence-fill.low {
+    background: linear-gradient(90deg, var(--neutral-slate), var(--peace-blue));
+}
+
+.icon-neutral {
+    background: linear-gradient(135deg, var(--hope-green), var(--calm-teal));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.icon-depression {
+    background: linear-gradient(135deg, var(--awareness-orange), var(--awareness-red));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.icon-anxiety {
+    background: linear-gradient(135deg, var(--caution-yellow), var(--awareness-orange));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.loading-spinner {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+}
+
+.spinner-custom {
+    border: 4px solid #e0e7ff;
+    border-top: 4px solid var(--trust-purple);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="text-center mb-5">
-                <h1 class="display-4 fw-bold text-gradient">AI Text Analysis</h1>
-                <p class="lead text-muted">Enter your text below for instant mental health analysis</p>
+                <h1 class="display-4 fw-bold text-gradient">Student Wellness Check</h1>
+                <p class="lead text-muted">AI-powered mental health awareness for students 🎓</p>
             </div>
             
             <div class="analysis-interface">
@@ -17,13 +427,13 @@
                     {% csrf_token %}
                     <div class="mb-4">
                         <label for="textInput" class="form-label fw-semibold">
-                            <i class="fas fa-edit text-primary me-2"></i>Your Text
+                            <i class="fas fa-edit text-primary me-2"></i>How are you feeling today?
                         </label>
                         <textarea 
                             class="form-control text-input" 
                             id="textInput" 
                             rows="8"
-                            placeholder="Share your thoughts, feelings, or experiences here..."
+                            placeholder="Share your thoughts about school, stress, studies, or how you're feeling... This is a safe space."
                             required>
                         </textarea>
                         <div id="charCount" class="form-text text-muted">
@@ -34,12 +444,12 @@
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <label for="modelSelect" class="form-label fw-semibold">
-                                <i class="fas fa-cog text-primary me-2"></i>Analysis Model
+                                <i class="fas fa-brain text-primary me-2"></i>AI Model
                             </label>
                             <select class="form-select" id="modelSelect">
-                                <option value="baseline" selected>Baseline Model (Recommended)</option>
-                                <option value="advanced">Advanced Model</option>
-                                <option value="ensemble">Ensemble Model</option>
+                                <option value="baseline" selected>Baseline (Fast & Reliable)</option>
+                                <option value="advanced">Advanced DistilBERT (Most Accurate)</option>
+                                <option value="ensemble">Ensemble (Both Models)</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -49,7 +459,7 @@
                             <div class="form-check mt-2">
                                 <input class="form-check-input" type="checkbox" id="includeExplanation">
                                 <label class="form-check-label" for="includeExplanation">
-                                    Include detailed explanation
+                                    Include detailed AI explanation
                                 </label>
                             </div>
                         </div>
@@ -57,7 +467,7 @@
                     
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary btn-lg px-5" id="analyzeBtn">
-                            <i class="fas fa-brain me-2"></i>Analyze Text
+                            <i class="fas fa-brain me-2"></i>Analyze My Wellbeing
                         </button>
                         <button type="button" class="btn btn-outline-secondary btn-lg px-4 ms-3" id="clearBtn">
                             <i class="fas fa-eraser me-2"></i>Clear
@@ -66,10 +476,10 @@
                 </form>
                 
                 <!-- Loading Spinner -->
-                <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div id="loadingSpinner" class="loading-spinner p-5 rounded mt-4" style="display: none;">
                     <div class="spinner-custom"></div>
-                    <h5>Analyzing your text...</h5>
-                    <p class="text-muted">This may take a few moments</p>
+                    <h5 class="text-center">Analyzing your wellbeing...</h5>
+                    <p class="text-muted text-center">Our AI is reading your text carefully</p>
                 </div>
                 
                 <!-- Results Container -->
@@ -79,18 +489,18 @@
     </div>
 </div>
 
-<!-- Important Disclaimer -->
+<!-- Disclaimer -->
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="alert alert-warning border-0">
+            <div class="alert alert-warning border-0" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid var(--caution-yellow);">
                 <h6 class="fw-bold mb-2">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Important Disclaimer
+                    <i class="fas fa-exclamation-triangle me-2"></i>Student Wellness Reminder
                 </h6>
                 <p class="mb-0">
-                    This tool is for educational and awareness purposes only. It is not a substitute 
-                    for professional medical advice, diagnosis, or treatment. If you're experiencing 
-                    mental health concerns, please consult with a qualified healthcare provider.
+                    This AI tool helps raise awareness about your mental state. It's NOT a replacement for 
+                    professional help. If you're struggling, please reach out to your campus counseling center, 
+                    academic advisor, or call a crisis hotline. You matter! 💙
                 </p>
             </div>
         </div>
@@ -109,7 +519,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const analyzeBtn = document.getElementById('analyzeBtn');
     const clearBtn = document.getElementById('clearBtn');
     
-    // Character counter
     textInput.addEventListener('input', updateCharCount);
     
     function updateCharCount() {
@@ -129,14 +538,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Clear button
     clearBtn.addEventListener('click', function() {
         textInput.value = '';
         updateCharCount();
         resultsDiv.style.display = 'none';
     });
     
-    // Form submission
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -144,7 +551,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const model = document.getElementById('modelSelect').value;
         const explain = document.getElementById('includeExplanation').checked;
         
-        // Validation
         if (text.length < 10) {
             alert('Please enter at least 10 characters');
             return;
@@ -155,7 +561,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Show loading
         loadingSpinner.style.display = 'block';
         resultsDiv.style.display = 'none';
         analyzeBtn.disabled = true;
@@ -194,25 +599,62 @@ document.addEventListener('DOMContentLoaded', function() {
         const confidenceLevel = data.confidence > 0.8 ? 'high' : data.confidence > 0.6 ? 'medium' : 'low';
         const predictionClass = `result-${data.prediction}`;
         
-        let html = `
+        let html = '';
+        
+        // Crisis Banner
+        if (data.is_crisis) {
+            html += `
+                <div class="crisis-banner text-white p-4 rounded mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-exclamation-circle fa-3x me-3"></i>
+                        <div>
+                            <h4 class="fw-bold mb-2">⚠️ We're Concerned About You</h4>
+                            <p class="mb-3">${data.crisis_resources.message}</p>
+                            <div class="row">
+                                ${data.crisis_resources.hotlines.map(hotline => `
+                                    <div class="col-md-6 mb-2">
+                                        <div class="bg-white bg-opacity-25 p-3 rounded">
+                                            <strong>${hotline.name}</strong><br>
+                                            <span class="fs-5">📞 ${hotline.number}</span><br>
+                                            <small>${hotline.available}</small>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mt-3">
+                                <strong>Do This Now:</strong>
+                                <ul class="mb-0">
+                                    ${data.crisis_resources.immediate_actions.map(action => `
+                                        <li>${action}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Main Results Card
+        html += `
             <div class="card ${predictionClass} result-card mt-4">
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="row mb-4">
                         <div class="col-md-8">
                             <h4 class="card-title mb-3">
-                                <i class="fas fa-clipboard-check text-primary me-2"></i>
-                                Analysis Results
+                                <i class="fas fa-clipboard-check me-2" style="color: var(--trust-purple);"></i>
+                                Your Wellness Analysis
                             </h4>
                             
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="d-flex align-items-center mb-3">
-                                        <div class="feature-icon icon-${data.prediction} me-3" style="width: 60px; height: 60px;">
+                                        <div class="icon-${data.prediction} me-3" style="width: 60px; height: 60px;">
                                             <i class="fas ${getPredictionIcon(data.prediction)}"></i>
                                         </div>
                                         <div>
                                             <h5 class="mb-0 text-capitalize">${data.prediction}</h5>
-                                            <small class="text-muted">Primary Classification</small>
+                                            <small class="text-muted">Mental State Detected</small>
                                         </div>
                                     </div>
                                 </div>
@@ -220,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="col-sm-6">
                                     <div class="mb-2">
                                         <div class="d-flex justify-content-between mb-1">
-                                            <span class="fw-semibold">Confidence</span>
+                                            <span class="fw-semibold">AI Confidence</span>
                                             <span class="fw-bold">${(data.confidence * 100).toFixed(1)}%</span>
                                         </div>
                                         <div class="confidence-bar">
@@ -235,28 +677,98 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="text-center">
                                 <div class="bg-light rounded p-3 mb-2">
                                     <div class="text-muted small">Model Used</div>
-                                    <div class="fw-bold text-primary">${data.model_used}</div>
+                                    <div class="fw-bold" style="color: var(--trust-purple);">${data.model_used}</div>
                                 </div>
                                 <div class="bg-light rounded p-3 mb-2">
-                                    <div class="text-muted small">Response Time</div>
-                                    <div class="fw-bold text-success">${data.processing_time}s</div>
+                                    <div class="text-muted small">Processing Time</div>
+                                    <div class="fw-bold" style="color: var(--hope-green);">${data.processing_time}s</div>
                                 </div>
                                 <div class="bg-light rounded p-3">
-                                    <div class="text-muted small">Text Length</div>
-                                    <div class="fw-bold text-info">${data.text_length} chars</div>
+                                    <div class="text-muted small">Text Analyzed</div>
+                                    <div class="fw-bold" style="color: var(--peace-blue);">${data.text_length} chars</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="alert alert-info border-0 mb-4">
-                        <i class="fas fa-info-circle me-2"></i>${data.message}
+                    <div class="alert border-0 mb-4" style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); border-left: 4px solid var(--peace-blue);">
+                        <i class="fas fa-info-circle me-2" style="color: var(--peace-blue);"></i>${data.message}
                     </div>
+                    
+                    <!-- Quick Actions -->
+                    ${data.quick_actions && data.quick_actions.length > 0 ? `
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3" style="color: var(--hope-green);">
+                                ⚡ Do This Right Now (Takes ${data.quick_actions[0].time})
+                            </h5>
+                            <div class="row">
+                                ${data.quick_actions.map(action => `
+                                    <div class="col-md-4 mb-3">
+                                        <div class="quick-action-card ${data.prediction} p-3 h-100">
+                                            <div class="fs-2 mb-2 text-center">${action.icon}</div>
+                                            <div class="fw-semibold text-center mb-1">${action.action}</div>
+                                            <div class="text-center small text-muted">${action.time}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Wellness Tool: Breathing Exercise -->
+                    ${data.prediction === 'anxiety' ? `
+                        <div class="wellness-tool p-4 mt-4">
+                            <h5 class="fw-bold mb-3 text-center" style="color: var(--trust-purple);">
+                                🧘 Box Breathing Exercise
+                            </h5>
+                            <div class="text-center mb-3">
+                                <div class="breathing-circle" id="breathingCircle">
+                                    <span id="breathingText">Ready</span>
+                                </div>
+                                <p class="mt-3 text-muted">Click the button to start a calming breathing exercise</p>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary" onclick="startBreathing()">
+                                    <i class="fas fa-play me-2"></i>Start Breathing Exercise
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Study Tips -->
+                    ${data.study_tips && data.study_tips.length > 0 ? `
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3" style="color: var(--caution-yellow);">
+                                📚 Study Tips for Your State
+                            </h5>
+                            ${data.study_tips.map(tip => `
+                                <div class="study-tip-card">
+                                    <i class="fas fa-lightbulb me-2" style="color: var(--caution-yellow);"></i>
+                                    <strong>${tip}</strong>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Recommendations -->
+                    ${data.recommendations && data.recommendations.length > 0 ? `
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3" style="color: var(--hope-green);">
+                                💚 Recommended Next Steps
+                            </h5>
+                            ${data.recommendations.map(rec => `
+                                <div class="recommendation-card">
+                                    <i class="fas fa-check-circle me-2" style="color: var(--hope-green);"></i>
+                                    <span>${rec}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
                     
                     <!-- Probabilities -->
                     <div class="mt-4">
                         <h6 class="fw-bold mb-3">
-                            <i class="fas fa-chart-bar text-info me-2"></i>Detailed Probabilities
+                            <i class="fas fa-chart-bar me-2" style="color: var(--trust-purple);"></i>Detailed AI Analysis
                         </h6>
                         <div class="row">
                             ${Object.entries(data.probabilities).map(([label, prob]) => `
@@ -264,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <div class="text-center">
                                         <div class="fw-semibold text-capitalize mb-1">${label}</div>
                                         <div class="progress mb-1" style="height: 10px;">
-                                            <div class="progress-bar bg-primary" style="width: ${prob * 100}%"></div>
+                                            <div class="progress-bar" style="width: ${prob * 100}%; background: ${getColorForLabel(label)};"></div>
                                         </div>
                                         <small class="text-muted">${(prob * 100).toFixed(1)}%</small>
                                     </div>
@@ -273,49 +785,30 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                     </div>
                     
-                    <!-- Recommendations -->
-                    ${data.recommendations && data.recommendations.length > 0 ? `
-                        <div class="mt-4">
-                            <h6 class="fw-bold mb-3">
-                                <i class="fas fa-heart text-danger me-2"></i>Recommendations
-                            </h6>
-                            <div class="bg-light rounded p-3">
-                                ${data.recommendations.map(rec => `
-                                    <div class="d-flex align-items-start mb-2">
-                                        <i class="fas fa-arrow-right text-primary me-2 mt-1"></i>
-                                        <span>${rec}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    
                     <!-- Explanation -->
                     ${data.explanation ? `
-                        <div class="mt-4">
-                            <h6 class="fw-bold mb-3">
-                                <i class="fas fa-lightbulb text-warning me-2"></i>Detailed Explanation
+                        <div class="mt-4 p-3 rounded" style="background: #f8fafc;">
+                            <h6 class="fw-bold mb-2">
+                                <i class="fas fa-brain me-2" style="color: var(--trust-purple);"></i>How the AI Analyzed Your Text
                             </h6>
-                            <div class="bg-light rounded p-3">
-                                <p class="mb-2"><strong>Analysis Reasoning:</strong> ${data.explanation.reasoning}</p>
-                                <p class="mb-2"><strong>Confidence Details:</strong> ${data.explanation.confidence_explanation}</p>
-                                <small class="text-muted">${data.explanation.disclaimer}</small>
-                            </div>
+                            <p class="mb-2"><strong>Reasoning:</strong> ${data.explanation.reasoning}</p>
+                            <p class="mb-2"><strong>Confidence:</strong> ${data.explanation.confidence_explanation}</p>
+                            <small class="text-muted">${data.explanation.disclaimer}</small>
                         </div>
                     ` : ''}
                     
                     <!-- Feedback -->
                     <div class="mt-4 pt-4 border-top">
                         <h6 class="fw-bold mb-3">
-                            <i class="fas fa-thumbs-up text-success me-2"></i>Rate This Analysis
+                            <i class="fas fa-star me-2" style="color: var(--caution-yellow);"></i>Rate This Analysis
                         </h6>
                         <div class="text-center">
                             <div class="rating-stars mb-3" data-analysis-id="${data.id}">
                                 ${[1, 2, 3, 4, 5].map(rating => 
-                                    `<span class="star" data-rating="${rating}">⭐</span>`
+                                    `<span class="star" data-rating="${rating}" style="font-size: 2rem; cursor: pointer; color: #ddd;">⭐</span>`
                                 ).join('')}
                             </div>
-                            <p class="text-muted small">Your feedback helps improve our AI models</p>
+                            <p class="text-muted small">Your feedback helps us improve our AI for students</p>
                         </div>
                     </div>
                 </div>
@@ -332,24 +825,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 const rating = this.dataset.rating;
                 const analysisId = this.parentElement.dataset.analysisId;
                 submitRating(analysisId, rating);
+                
+                // Visual feedback
+                document.querySelectorAll('.star').forEach((s, index) => {
+                    s.style.color = index < rating ? '#fbbf24' : '#ddd';
+                });
             });
         });
     }
     
     function getPredictionIcon(prediction) {
         const icons = {
-            neutral: 'fa-smile',
-            depression: 'fa-frown',
+            neutral: 'fa-smile-beam',
+            depression: 'fa-sad-tear',
             anxiety: 'fa-exclamation-triangle'
         };
         return icons[prediction] || 'fa-question-circle';
     }
     
+    function getColorForLabel(label) {
+        const colors = {
+            neutral: 'linear-gradient(90deg, var(--hope-green), var(--calm-teal))',
+            depression: 'linear-gradient(90deg, var(--awareness-orange), var(--awareness-red))',
+            anxiety: 'linear-gradient(90deg, var(--caution-yellow), var(--awareness-orange))'
+        };
+        return colors[label] || 'var(--neutral-slate)';
+    }
+    
     function showError(message) {
         resultsDiv.innerHTML = `
-            <div class="alert alert-danger border-0 mt-4">
+            <div class="alert border-0 mt-4" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-left: 4px solid var(--awareness-red);">
                 <div class="d-flex">
-                    <i class="fas fa-exclamation-triangle fa-2x text-danger me-3"></i>
+                    <i class="fas fa-exclamation-triangle fa-2x me-3" style="color: var(--awareness-red);"></i>
                     <div>
                         <h5 class="alert-heading">Analysis Error</h5>
                         <p class="mb-0">${message}</p>
@@ -375,11 +882,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             if (response.ok) {
-                alert('Thank you for your feedback!');
-                // Highlight selected stars
-                document.querySelectorAll('.star').forEach((star, index) => {
-                    star.style.color = index < rating ? '#fbbf24' : '#ddd';
-                });
+                alert('Thank you for your feedback! This helps us improve. 💙');
             }
         } catch (error) {
             console.error('Failed to submit rating:', error);
@@ -401,8 +904,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue;
     }
     
-    // Initialize
     updateCharCount();
 });
-</script>
-{% endblock %}
+
+// Breathing Exercise Function
+function startBreathing() {
+    const circle = document.getElementById('breathingCircle');
+    const text = document.getElementById('breathingText');
+    
+    const phases = [
+        { class: 'inhale', text: 'Breathe In', duration: 4000 },
+        { class: 'hold', text: 'Hold', duration: 4000 },
+        { class: 'exhale', text: 'Breathe Out', duration: 4000 },
+        { class: 'hold', text: 'Hold', duration: 4000 }
+    ];
+    
+    let currentPhase = 0;
+    
+    function nextPhase() {
+        circle.className = 'breathing-circle ' + phases[currentPhase].class;
+
+
+currentPhase = (currentPhase + 1) % phases.length;
+    
+    setTimeout(nextPhase, phases[(currentPhase - 1 + phases.length) % phases.length].duration);
+}
+
+nextPhase();
