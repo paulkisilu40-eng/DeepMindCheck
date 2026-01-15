@@ -921,13 +921,25 @@ function startBreathing() {
     
     let currentPhase = 0;
     
-    function nextPhase() {
-        circle.className = 'breathing-circle ' + phases[currentPhase].class;
+// function nextPhase() {
+//         circle.className = 'breathing-circle ' + phases[currentPhase].class;
 
 
-currentPhase = (currentPhase + 1) % phases.length;
+// currentPhase = (currentPhase + 1) % phases.length;
     
-    setTimeout(nextPhase, phases[(currentPhase - 1 + phases.length) % phases.length].duration);
+//     setTimeout(nextPhase, phases[(currentPhase - 1 + phases.length) % phases.length].duration);
+// }
+
+// nextPhase();
+function nextPhase() {
+    circle.className = 'breathing-circle ' + phases[currentPhase].class;
+    text.textContent = phases[currentPhase].text;
+
+    const duration = phases[currentPhase].duration;
+    currentPhase = (currentPhase + 1) % phases.length;
+
+    setTimeout(nextPhase, duration);
 }
 
 nextPhase();
+
