@@ -36,8 +36,8 @@ class MLPredictor:
             model_path = Path(settings.BASE_DIR) / 'ml_models'
             
             # Adjust these filenames to match your actual files
-            baseline_path = model_path / 'baseline_model.pkl'
-            vectorizer_path = model_path / 'vectorizer.pkl'
+            baseline_path = model_path / 'best_model.pkl'
+            vectorizer_path = model_path / 'best_vectorizer.pkl'
             
             if baseline_path.exists() and vectorizer_path.exists():
                 with open(baseline_path, 'rb') as f:
