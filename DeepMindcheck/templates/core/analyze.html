@@ -1,0 +1,995 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Text Analysis - DeepMindCheck{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --awareness-red: #ef4444;
+        --awareness-orange: #f97316;
+        --caution-yellow: #fbbf24;
+        --hope-green: #10b981;
+        --calm-teal: #14b8a6;
+        --peace-blue: #3b82f6;
+        --trust-purple: #8b5cf6;
+        --neutral-slate: #64748b;
+    }
+
+    /* Glass card effect */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .analysis-interface {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
+        border: 1px solid rgba(102, 126, 234, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .analysis-interface:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 25px 70px rgba(102, 126, 234, 0.2);
+    }
+
+    .text-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1.25rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    .text-input:focus {
+        border-color: var(--trust-purple);
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        outline: none;
+    }
+
+    .model-select-wrapper {
+        position: relative;
+    }
+
+    .model-select-wrapper select {
+        appearance: none;
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.75rem 2.5rem 0.75rem 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .model-select-wrapper select:focus {
+        border-color: var(--trust-purple);
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    }
+
+    .model-select-wrapper::after {
+        content: '▼';
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--trust-purple);
+        font-size: 0.75rem;
+    }
+
+    .crisis-banner {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        border-left: 6px solid #991b1b;
+        animation: pulseAlert 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseAlert {
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+        50% {
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.6);
+        }
+    }
+
+    .result-card {
+        border-radius: 20px;
+        overflow: hidden;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .result-card.result-depression {
+        border-left: 5px solid var(--awareness-orange);
+        background: linear-gradient(to right, #fff7ed 0%, #ffffff 100%);
+    }
+
+    .result-card.result-anxiety {
+        border-left: 5px solid var(--caution-yellow);
+        background: linear-gradient(to right, #fefce8 0%, #ffffff 100%);
+    }
+
+    .result-card.result-neutral {
+        border-left: 5px solid var(--hope-green);
+        background: linear-gradient(to right, #f0fdf4 0%, #ffffff 100%);
+    }
+
+    .quick-action-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border-radius: 16px;
+        background: white;
+        border: 2px solid transparent;
+    }
+
+    .quick-action-card.depression {
+        background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+        border-color: var(--awareness-orange);
+    }
+
+    .quick-action-card.anxiety {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border-color: var(--peace-blue);
+    }
+
+    .quick-action-card.neutral {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border-color: var(--hope-green);
+    }
+
+    .quick-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .wellness-tool {
+        background: linear-gradient(135deg, #e0e7ff 0%, #ffffff 100%);
+        border-radius: 20px;
+        border: 2px solid var(--trust-purple);
+    }
+
+    .breathing-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--calm-teal), var(--peace-blue));
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+    }
+
+    .breathing-circle.inhale {
+        animation: breatheIn 4s ease-in-out;
+    }
+
+    .breathing-circle.hold {
+        animation: breatheHold 4s ease-in-out;
+    }
+
+    .breathing-circle.exhale {
+        animation: breatheOut 4s ease-in-out;
+    }
+
+    @keyframes breatheIn {
+        0% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.3);
+        }
+
+        100% {
+            transform: scale(1.3);
+        }
+    }
+
+    @keyframes breatheHold {
+
+        0%,
+        100% {
+            transform: scale(1.3);
+        }
+    }
+
+    @keyframes breatheOut {
+        0% {
+            transform: scale(1.3);
+        }
+
+        50% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .recommendation-card {
+        background: white;
+        border-left: 4px solid var(--hope-green);
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        border-radius: 12px;
+        transition: all 0.2s;
+    }
+
+    .recommendation-card:hover {
+        background: #f0fdf4;
+        transform: translateX(5px);
+    }
+
+    .study-tip-card {
+        background: linear-gradient(135deg, #fef3c7 0%, #ffffff 100%);
+        border-left: 4px solid var(--caution-yellow);
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        border-radius: 12px;
+    }
+
+    .confidence-bar {
+        height: 12px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .confidence-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 1s ease;
+    }
+
+    .confidence-fill.high {
+        background: linear-gradient(90deg, var(--hope-green), var(--calm-teal));
+    }
+
+    .confidence-fill.medium {
+        background: linear-gradient(90deg, var(--caution-yellow), var(--awareness-orange));
+    }
+
+    .confidence-fill.low {
+        background: linear-gradient(90deg, var(--neutral-slate), var(--peace-blue));
+    }
+
+    .icon-neutral,
+    .icon-depression,
+    .icon-anxiety {
+        width: 60px;
+        height: 60px;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    .icon-neutral {
+        background: linear-gradient(135deg, var(--hope-green), var(--calm-teal));
+    }
+
+    .icon-depression {
+        background: linear-gradient(135deg, var(--awareness-orange), var(--awareness-red));
+    }
+
+    .icon-anxiety {
+        background: linear-gradient(135deg, var(--caution-yellow), var(--awareness-orange));
+    }
+
+    .loading-spinner {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+        border-radius: 20px;
+    }
+
+    .spinner-custom {
+        border: 4px solid #e0e7ff;
+        border-top: 4px solid var(--trust-purple);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 2rem auto;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 0.875rem 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .feedback-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+
+    .feedback-textarea {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.75rem;
+        resize: vertical;
+        min-height: 80px;
+        transition: all 0.3s ease;
+    }
+
+    .feedback-textarea:focus {
+        border-color: var(--trust-purple);
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        outline: none;
+    }
+
+    .rating-stars .star {
+        transition: all 0.2s ease;
+    }
+
+    .rating-stars .star:hover {
+        transform: scale(1.2);
+    }
+
+    .correct-label-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h1 class="display-4 fw-bold"
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Student Wellness Check
+                </h1>
+                <p class="lead text-muted">NLP-powered mental health awareness for students 🎓</p>
+            </div>
+
+            <div class="analysis-interface" data-aos="fade-up" data-aos-delay="100">
+                <form id="analysisForm">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="textInput" class="form-label fw-semibold">
+                            <i class="fas fa-edit text-primary me-2"></i>How are you feeling today?
+                        </label>
+                        <textarea class="form-control text-input" id="textInput" rows="8"
+                            placeholder="Share your thoughts about school, stress, studies, or how you're feeling... This is a safe space."
+                            required>
+                        </textarea>
+                        <div id="charCount" class="form-text text-muted mt-2">
+                            <i class="fas fa-info-circle me-1"></i>Minimum 10 characters required
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="modelSelect" class="form-label fw-semibold">
+                                <i class="fas fa-brain text-primary me-2"></i>NLP Model
+                            </label>
+                            <div class="model-select-wrapper">
+                                <select class="form-select" id="modelSelect">
+                                    <option value="baseline" selected>Baseline (Fast & Reliable)</option>
+                                    <option value="advanced">Advanced BERT (Most Accurate)</option>
+                                    <option value="embedded">Embedded BERT (Sentiment)</option>
+                                    <option value="ensemble">Ensemble (Combined Models)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-sliders-h text-primary me-2"></i>Options
+                            </label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="includeExplanation">
+                                <label class="form-check-label" for="includeExplanation">
+                                    Include detailed NLP explanation
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5" id="analyzeBtn">
+                            <i class="fas fa-brain me-2"></i>Analyze My Wellbeing
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-lg px-4 ms-3" id="clearBtn">
+                            <i class="fas fa-eraser me-2"></i>Clear
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="loading-spinner p-5 rounded mt-4" style="display: none;">
+                    <div class="spinner-custom"></div>
+                    <h5 class="text-center">Analyzing your wellbeing...</h5>
+                    <p class="text-muted text-center">Our NLP models are processing your text carefully</p>
+                </div>
+
+                <!-- Results Container -->
+                <div id="results" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Disclaimer -->
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="alert alert-warning border-0"
+                style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid var(--caution-yellow); border-radius: 16px;">
+                <h6 class="fw-bold mb-2">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Student Wellness Reminder
+                </h6>
+                <p class="mb-0">
+                    This NLP tool helps raise awareness about your mental state. It's NOT a replacement for
+                    professional help. If you're struggling, please reach out to your campus counseling center,
+                    academic advisor, or call a crisis hotline. You matter! 💙
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('analysisForm');
+        const textInput = document.getElementById('textInput');
+        const charCount = document.getElementById('charCount');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const resultsDiv = document.getElementById('results');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+
+        textInput.addEventListener('input', updateCharCount);
+
+        function updateCharCount() {
+            const length = textInput.value.length;
+            const remaining = 2000 - length;
+
+            if (length < 10) {
+                const needed = 10 - length;
+                charCount.innerHTML = `<i class="fas fa-info-circle me-1"></i>${needed} more characters needed (${length}/10+)`;
+                charCount.className = 'form-text text-warning';
+            } else if (length > 2000) {
+                charCount.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i>Text too long! Remove ${-remaining} characters (${length}/2000)`;
+                charCount.className = 'form-text text-danger';
+            } else {
+                charCount.innerHTML = `<i class="fas fa-check-circle me-1"></i>Ready for analysis! (${length} characters, ${remaining} remaining)`;
+                charCount.className = 'form-text text-success';
+            }
+        }
+
+        clearBtn.addEventListener('click', function () {
+            textInput.value = '';
+            updateCharCount();
+            resultsDiv.style.display = 'none';
+        });
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const text = textInput.value.trim();
+            const model = document.getElementById('modelSelect').value;
+            const explain = document.getElementById('includeExplanation').checked;
+
+            if (text.length < 10) {
+                alert('Please enter at least 10 characters');
+                return;
+            }
+
+            if (text.length > 2000) {
+                alert('Text is too long. Maximum 2000 characters allowed');
+                return;
+            }
+
+            loadingSpinner.style.display = 'block';
+            resultsDiv.style.display = 'none';
+            analyzeBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/analyze/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        model: model,
+                        explain: explain
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                loadingSpinner.style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        function displayResults(data) {
+            const confidenceLevel = data.confidence > 0.8 ? 'high' : data.confidence > 0.6 ? 'medium' : 'low';
+            const predictionClass = `result-${data.prediction}`;
+
+            let html = '';
+
+            // Crisis Banner
+            if (data.is_crisis) {
+                html += `
+                <div class="crisis-banner text-white p-4 rounded-4 mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-exclamation-circle fa-3x me-3"></i>
+                        <div>
+                            <h4 class="fw-bold mb-2">⚠️ We're Concerned About You</h4>
+                            <p class="mb-3">${data.crisis_resources.message}</p>
+                            <div class="row">
+                                ${data.crisis_resources.hotlines.map(hotline => `
+                                    <div class="col-md-6 mb-2">
+                                        <div class="bg-white bg-opacity-25 p-3 rounded">
+                                            <strong>${hotline.name}</strong><br>
+                                            <span class="fs-5">📞 ${hotline.number}</span><br>
+                                            <small>${hotline.available}</small>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mt-3">
+                                <strong>Do This Now:</strong>
+                                <ul class="mb-0">
+                                    ${data.crisis_resources.immediate_actions.map(action => `
+                                        <li>${action}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }
+
+            // Main Results Card
+            html += `
+            <div class="card ${predictionClass} result-card mt-4">
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h4 class="card-title mb-3">
+                                <i class="fas fa-clipboard-check me-2" style="color: var(--trust-purple);"></i>
+                                Your Wellness Analysis
+                            </h4>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="icon-${data.prediction} me-3">
+                                            <i class="fas ${getPredictionIcon(data.prediction)}"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0 text-capitalize">${data.prediction}</h5>
+                                            <small class="text-muted">Mental State Detected</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <div class="mb-2">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="fw-semibold">NLP Confidence</span>
+                                            <span class="fw-bold">${(data.confidence * 100).toFixed(1)}%</span>
+                                        </div>
+                                        <div class="confidence-bar">
+                                            <div class="confidence-fill ${confidenceLevel}" style="width: ${data.confidence * 100}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="bg-light rounded-3 p-3 mb-2">
+                                    <div class="text-muted small">Model Used</div>
+                                    <div class="fw-bold" style="color: var(--trust-purple);">${data.model_used}</div>
+                                </div>
+                                <div class="bg-light rounded-3 p-3 mb-2">
+                                    <div class="text-muted small">Processing Time</div>
+                                    <div class="fw-bold" style="color: var(--hope-green);">${data.processing_time}s</div>
+                                </div>
+                                <div class="bg-light rounded-3 p-3">
+                                    <div class="text-muted small">Text Analyzed</div>
+                                    <div class="fw-bold" style="color: var(--peace-blue);">${data.text_length} chars</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert border-0 mb-4" style="background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%); border-left: 4px solid var(--peace-blue); border-radius: 12px;">
+                        <i class="fas fa-info-circle me-2" style="color: var(--peace-blue);"></i>${data.message}
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    ${data.quick_actions && data.quick_actions.length > 0 ? `
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3" style="color: var(--hope-green);">
+                                ⚡ Do This Right Now (Takes ${data.quick_actions[0].time})
+                            </h5>
+                            <div class="row">
+                                ${data.quick_actions.map(action => `
+                                    <div class="col-md-4 mb-3">
+                                        <div class="quick-action-card ${data.prediction} p-3 h-100">
+                                            <div class="fs-2 mb-2 text-center">${action.icon}</div>
+                                            <div class="fw-semibold text-center mb-1">${action.action}</div>
+                                            <div class="text-center small text-muted">${action.time}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Wellness Tool: Breathing Exercise -->
+                    ${data.prediction === 'anxiety' ? `
+                        <div class="wellness-tool p-4 mt-4">
+                            <h5 class="fw-bold mb-3 text-center" style="color: var(--trust-purple);">
+                                🧘 Box Breathing Exercise
+                            </h5>
+                            <div class="text-center mb-3">
+                                <div class="breathing-circle" id="breathingCircle">
+                                    <span id="breathingText">Ready</span>
+                                </div>
+                                <p class="mt-3 text-muted">Click the button to start a calming breathing exercise</p>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary" onclick="startBreathing()">
+                                    <i class="fas fa-play me-2"></i>Start Breathing Exercise
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Study Tips -->
+                    ${data.study_tips && data.study_tips.length > 0 ? `
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3" style="color: var(--caution-yellow);">
+                                📚 Study Tips for Your State
+                            </h5>
+                            ${data.study_tips.map(tip => `
+                                <div class="study-tip-card">
+                                    <i class="fas fa-lightbulb me-2" style="color: var(--caution-yellow);"></i>
+                                    <strong>${tip}</strong>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Recommendations -->
+                    ${data.recommendations && data.recommendations.length > 0 ? `
+                        <div class="mt-4">
+                            <h5 class="fw-bold mb-3" style="color: var(--hope-green);">
+                                💚 Recommended Next Steps
+                            </h5>
+                            ${data.recommendations.map(rec => `
+                                <div class="recommendation-card">
+                                    <i class="fas fa-check-circle me-2" style="color: var(--hope-green);"></i>
+                                    <span>${rec}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Probabilities -->
+                    <div class="mt-4">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-chart-bar me-2" style="color: var(--trust-purple);"></i>Detailed NLP Analysis
+                        </h6>
+                        <div class="row">
+                            ${Object.entries(data.probabilities).map(([label, prob]) => `
+                                <div class="col-md-4 mb-3">
+                                    <div class="text-center">
+                                        <div class="fw-semibold text-capitalize mb-1">${label}</div>
+                                        <div class="progress mb-1" style="height: 10px; border-radius: 10px;">
+                                            <div class="progress-bar" style="width: ${prob * 100}%; background: ${getColorForLabel(label)}; border-radius: 10px;"></div>
+                                        </div>
+                                        <small class="text-muted">${(prob * 100).toFixed(1)}%</small>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <!-- Explanation -->
+                    ${data.explanation ? `
+                        <div class="mt-4 p-3 rounded-3" style="background: #f8fafc;">
+                            <h6 class="fw-bold mb-2">
+                                <i class="fas fa-brain me-2" style="color: var(--trust-purple);"></i>How the NLP Model Analyzed Your Text
+                            </h6>
+                            <p class="mb-2"><strong>Reasoning:</strong> ${data.explanation.reasoning}</p>
+                            <p class="mb-2"><strong>Confidence:</strong> ${data.explanation.confidence_explanation}</p>
+                            <small class="text-muted">${data.explanation.disclaimer}</small>
+                        </div>
+                    ` : ''}
+                    
+                    <!-- Wellness Plan CTA -->
+                    <div class="mt-4 mb-5 text-center">
+                        <div class="p-4 rounded-3" style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 1px solid var(--hope-green);">
+                            <h5 class="fw-bold mb-2" style="color: var(--hope-green);">
+                                <i class="fas fa-calendar-check me-2"></i>Take Action for Your Wellbeing
+                            </h5>
+                            <p class="text-muted mb-3">Get a personalized 7-day plan with daily activities tailored to your current state.</p>
+                            <a href="/core/wellness-plan/?state=${data.prediction}&confidence=${data.confidence}" target="_blank" class="btn btn-success px-4 py-2 fw-bold">
+                                <i class="fas fa-magic me-2"></i>Generate My 7-Day Wellness Plan
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Section -->
+                    <div class="feedback-section mt-4">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-star me-2" style="color: var(--caution-yellow);"></i>Rate This Analysis
+                        </h6>
+                        <div class="row align-items-start">
+                            <div class="col-md-6">
+                                <div class="rating-stars mb-3" data-analysis-id="${data.id}">
+                                    ${[1, 2, 3, 4, 5].map(rating =>
+                `<span class="star" data-rating="${rating}" style="font-size: 2rem; cursor: pointer; color: #ddd;">⭐</span>`
+            ).join('')}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold">Was this classification correct?</label>
+                                    <select class="form-select correct-label-select" id="correctLabel">
+                                        <option value="">-- Select if incorrect --</option>
+                                        <option value="neutral">Should be: Neutral</option>
+                                        <option value="depression">Should be: Depression</option>
+                                        <option value="anxiety">Should be: Anxiety</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold">Additional Feedback (Optional)</label>
+                                <textarea class="form-control feedback-textarea" id="feedbackText" 
+                                    placeholder="Tell us how we can improve this analysis..."></textarea>
+                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button class="btn btn-outline-primary" id="submitFeedbackBtn" onclick="submitFeedback('${data.id}')">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                            </button>
+                        </div>
+                        <p class="text-muted small text-center mt-2">Your feedback helps us improve our NLP models for students</p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            resultsDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+            // Add rating functionality
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function () {
+                    const rating = this.dataset.rating;
+
+                    // Visual feedback
+                    document.querySelectorAll('.star').forEach((s, index) => {
+                        s.style.color = index < rating ? '#fbbf24' : '#ddd';
+                    });
+
+                    // Store the rating
+                    this.parentElement.dataset.selectedRating = rating;
+                });
+
+                star.addEventListener('mouseenter', function () {
+                    const rating = this.dataset.rating;
+                    document.querySelectorAll('.star').forEach((s, index) => {
+                        s.style.color = index < rating ? '#fbbf24' : '#ddd';
+                    });
+                });
+
+                star.addEventListener('mouseleave', function () {
+                    const selectedRating = this.parentElement.dataset.selectedRating || 0;
+                    document.querySelectorAll('.star').forEach((s, index) => {
+                        s.style.color = index < selectedRating ? '#fbbf24' : '#ddd';
+                    });
+                });
+            });
+        }
+
+        function getPredictionIcon(prediction) {
+            const icons = {
+                neutral: 'fa-smile-beam',
+                depression: 'fa-sad-tear',
+                anxiety: 'fa-exclamation-triangle'
+            };
+            return icons[prediction] || 'fa-question-circle';
+        }
+
+        function getColorForLabel(label) {
+            const colors = {
+                neutral: 'linear-gradient(90deg, var(--hope-green), var(--calm-teal))',
+                depression: 'linear-gradient(90deg, var(--awareness-orange), var(--awareness-red))',
+                anxiety: 'linear-gradient(90deg, var(--caution-yellow), var(--awareness-orange))'
+            };
+            return colors[label] || 'var(--neutral-slate)';
+        }
+
+        function showError(message) {
+            resultsDiv.innerHTML = `
+            <div class="alert border-0 mt-4" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-left: 4px solid var(--awareness-red); border-radius: 16px;">
+                <div class="d-flex">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3" style="color: var(--awareness-red);"></i>
+                    <div>
+                        <h5 class="alert-heading">Analysis Error</h5>
+                        <p class="mb-0">${message}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+            resultsDiv.style.display = 'block';
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        updateCharCount();
+    });
+
+    // Submit feedback function
+    async function submitFeedback(analysisId) {
+        const ratingStars = document.querySelector('.rating-stars');
+        const rating = parseInt(ratingStars.dataset.selectedRating) || 0;
+        const feedbackText = document.getElementById('feedbackText').value.trim();
+        const correctLabel = document.getElementById('correctLabel').value;
+
+        if (rating === 0) {
+            alert('Please select a star rating first.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/feedback/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    analysis_id: analysisId,
+                    rating: rating,
+                    feedback_text: feedbackText,
+                    correct_label: correctLabel || null
+                })
+            });
+
+            if (response.ok) {
+                const btn = document.getElementById('submitFeedbackBtn');
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Thank You!';
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-success');
+                btn.disabled = true;
+            } else {
+                const data = await response.json();
+                alert(data.error || 'Failed to submit feedback');
+            }
+        } catch (error) {
+            console.error('Failed to submit feedback:', error);
+            alert('Failed to submit feedback. Please try again.');
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Breathing Exercise Function
+    function startBreathing() {
+        const circle = document.getElementById('breathingCircle');
+        const text = document.getElementById('breathingText');
+
+        const phases = [
+            { class: 'inhale', text: 'Breathe In', duration: 4000 },
+            { class: 'hold', text: 'Hold', duration: 4000 },
+            { class: 'exhale', text: 'Breathe Out', duration: 4000 },
+            { class: 'hold', text: 'Hold', duration: 4000 }
+        ];
+
+        let currentPhase = 0;
+
+        function nextPhase() {
+            circle.className = 'breathing-circle ' + phases[currentPhase].class;
+            text.textContent = phases[currentPhase].text;
+
+            const duration = phases[currentPhase].duration;
+            currentPhase = (currentPhase + 1) % phases.length;
+
+            setTimeout(nextPhase, duration);
+        }
+
+        nextPhase();
+    }
+</script>
+{% endblock %}
