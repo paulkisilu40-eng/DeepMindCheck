@@ -143,15 +143,68 @@ def test_view(request):
     
     return render(request, 'core/test.html', context)
 
+# def wellness_plan_view(request):
+#     """Generate and display personalized wellness plan"""
+#     from wellness_plans import generate_wellness_plan
+    
+#     # Get params from session or request
+#     mental_state = request.GET.get('state', 'neutral')
+#     confidence = float(request.GET.get('confidence', 0.8))
+    
+#     plan = generate_wellness_plan(mental_state, confidence)
+    
+#     context = {
+#         'page_title': 'My Wellness Plan',
+#         'plan': plan
+#     }
+    
+#     return render(request, 'core/wellness_plan.html', context)
 def wellness_plan_view(request):
     """Generate and display personalized wellness plan"""
-    from wellness_plans import generate_wellness_plan
+    import sys
+    import os
     
-    # Get params from session or request
+    # Get the project root directory (where manage.py is)
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Add it to Python path if not already there
+    if BASE_DIR not in sys.path:
+        sys.path.insert(0, BASE_DIR)
+    
+    try:
+        import wellness_plans
+        from wellness_plans import generate_wellness_plan
+    except ImportError as e:
+        logger.error(f"Could not import wellness_plans: {e}")
+        from django.contrib import messages
+        messages.error(request, "Wellness plan generator is not available.")
+        return redirect('analyze')
+    
+    # Get params from request
     mental_state = request.GET.get('state', 'neutral')
-    confidence = float(request.GET.get('confidence', 0.8))
     
-    plan = generate_wellness_plan(mental_state, confidence)
+    # Validate mental state
+    valid_states = ['neutral', 'depression', 'anxiety']
+    if mental_state not in valid_states:
+        mental_state = 'neutral'
+    
+    try:
+        confidence = float(request.GET.get('confidence', 0.8))
+    except (ValueError, TypeError):
+        confidence = 0.8
+    
+    # Clamp confidence between 0 and 1
+    confidence = max(0.0, min(1.0, confidence))
+    
+    # Generate the plan
+    try:
+        plan = generate_wellness_plan(mental_state, confidence)
+        logger.info(f"Generated wellness plan for state: {mental_state}")
+    except Exception as e:
+        logger.error(f"Error generating wellness plan: {e}", exc_info=True)
+        from django.contrib import messages
+        messages.error(request, "Error generating wellness plan. Please try again.")
+        return redirect('analyze')
     
     context = {
         'page_title': 'My Wellness Plan',
