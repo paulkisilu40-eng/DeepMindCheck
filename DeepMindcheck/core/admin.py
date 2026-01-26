@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import TextAnalysis, UserFeedback, SystemMetrics
+from .models import TextAnalysis, UserFeedback, SystemMetrics, WellnessPlan
+
+@admin.register(WellnessPlan)
+class WellnessPlanAdmin(admin.ModelAdmin):
+    list_display = ('user', 'mental_state', 'created_at')
+    list_filter = ('mental_state', 'created_at')
+    search_fields = ('user__username', 'mental_state')
+    date_hierarchy = 'created_at'
 
 @admin.register(TextAnalysis)
 class TextAnalysisAdmin(admin.ModelAdmin):

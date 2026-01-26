@@ -159,3 +159,29 @@ def wellness_plan_view(request):
     }
     
     return render(request, 'core/wellness_plan.html', context)
+
+def save_wellness_plan(request):
+    """API endpoint to save a wellness plan"""
+    if request.method != 'POST' or not request.user.is_authenticated:
+        return JsonResponse({'error': 'Unauthorized or invalid method'}, status=403)
+        
+    import json
+    try:
+        data = json.loads(request.body)
+        mental_state = data.get('mental_state')
+        plan_data = data.get('plan_data')
+        
+        if not mental_state or not plan_data:
+            return JsonResponse({'error': 'Missing data'}, status=400)
+            
+        from .models import WellnessPlan
+        WellnessPlan.objects.create(
+            user=request.user,
+            mental_state=mental_state,
+            plan_data=plan_data
+        )
+        
+        return JsonResponse({'success': True})
+    except Exception as e:
+        logger.error(f"Error saving plan: {e}")
+        return JsonResponse({'error': str(e)}, status=500)

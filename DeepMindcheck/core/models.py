@@ -123,3 +123,16 @@ class SystemMetrics(models.Model):
         if self.total_analyses > 0:
             return round((self.feedback_count / self.total_analyses) * 100, 1)
         return 0
+
+class WellnessPlan(models.Model):
+    """Model to store generated wellness plans for users"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wellness_plans')
+    mental_state = models.CharField(max_length=50)
+    plan_data = models.JSONField(help_text="Full JSON data of the generated plan")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Plan for {self.user.username} - {self.mental_state} ({self.created_at.date()})"

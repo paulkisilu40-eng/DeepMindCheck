@@ -326,6 +326,10 @@
         </ul>
     </div>
 </div>
+
+<!-- Hidden script tag to safely pass plan data to JavaScript -->
+{{ plan|json_script:"plan-data" }}
+
 {% endblock %}
 
 {% block extra_js %}
@@ -373,16 +377,63 @@
         }
 
         // Save plan button
-        document.getElementById('savePlanBtn').addEventListener('click', function () {
+        document.getElementById('savePlanBtn').addEventListener('click', async function () {
+            {% if user.is_authenticated %}
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
+            try {
+                // Get plan data from the JSON script tag
+                const planData = JSON.parse(document.getElementById('plan-data').textContent);
+                
+                const response = await fetch('/api/save-wellness-plan/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        mental_state: '{{ plan.mental_state }}',
+                        plan_data: planData
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    saveProgress(); // Also save local progress
+                    showMessage('Plan saved to your profile! ✅');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Saved';
+                } else {
+                    throw new Error(data.error || 'Failed to save');
+                }
+            } catch (error) {
+                console.error('Error saving plan:', error);
+                showMessage('Error saving plan to profile. Local progress saved. ⚠️');
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 2000);
+            }
+            {% else %}
             saveProgress();
-            showMessage('Progress saved successfully! ✅');
+            showMessage('Progress saved locally! Login to save permanently. 💾');
+            // Optional: Redirect to login or show modal
+            if (confirm("Would you like to login to save this plan to your profile?")) {
+                window.location.href = "{% url 'login' %}?next=" + encodeURIComponent(window.location.pathname + window.location.search);
+            }
+            {% endif %}
         });
 
         // Download PDF button
         document.getElementById('downloadPdfBtn').addEventListener('click', function () {
             // In production, this would trigger a server-side PDF generation
             alert('PDF download feature would be implemented on the backend. Your progress has been saved!');
-            // window.location.href = "{% url 'download_wellness_pdf' plan.id %}";
+            // Uncomment when backend endpoint is ready:
+            // window.location.href = "{% url 'download_wellness_pdf' %}";
         });
 
         function updateDayProgress(dayNumber) {
