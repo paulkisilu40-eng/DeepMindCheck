@@ -320,9 +320,9 @@
     <div class="crisis-resources">
         <h3>🆘 CRISIS RESOURCES</h3>
         <ul>
-            <li>📞 988 Suicide & Crisis Lifeline</li>
-            <li>📱 Text HOME to 741741</li>
-            <li>🏥 Campus Health: (555) 123-4567</li>
+            <li>📞 911 Suicide & Crisis Lifeline</li>
+            <li>📱 Text HOME to 74123</li>
+            <li>🏥 Campus Health: (254) 741133337</li>
         </ul>
     </div>
 </div>
@@ -421,7 +421,6 @@
             {% else %}
             saveProgress();
             showMessage('Progress saved locally! Login to save permanently. 💾');
-            // Optional: Redirect to login or show modal
             if (confirm("Would you like to login to save this plan to your profile?")) {
                 window.location.href = "{% url 'login' %}?next=" + encodeURIComponent(window.location.pathname + window.location.search);
             }
@@ -430,10 +429,8 @@
 
         // Download PDF button
         document.getElementById('downloadPdfBtn').addEventListener('click', function () {
-            // In production, this would trigger a server-side PDF generation
-            alert('PDF download feature would be implemented on the backend. Your progress has been saved!');
-            // Uncomment when backend endpoint is ready:
-            // window.location.href = "{% url 'download_wellness_pdf' %}";
+            alert('PDF download feature coming soon! Your progress has been saved locally.');
+            // TODO: Implement PDF generation endpoint when needed
         });
 
         function updateDayProgress(dayNumber) {
