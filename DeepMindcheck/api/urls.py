@@ -7,4 +7,5 @@ urlpatterns = [
     path('analytics/dashboard/', views.analytics_dashboard_data, name='api_analytics'),
     path('model-info/', views.model_info, name='api_model_info'),
     path('health/', views.health_check, name='api_health'),
+     path('debug/stats/', views.debug_db_stats, name='debug_stats'),
 ]
