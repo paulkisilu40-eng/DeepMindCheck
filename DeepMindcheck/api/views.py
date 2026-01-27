@@ -109,3 +109,53 @@ def analyze_text(request):
         return Response({
             'error': 'Analysis failed. Please try again.'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def debug_db_stats(request):
+    """Debug endpoint to check database - REMOVE IN PRODUCTION"""
+    from core.models import TextAnalysis
+    from django.contrib.auth.models import User
+    
+    try:
+        # Get stats
+        total_analyses = TextAnalysis.objects.count()
+        with_user = TextAnalysis.objects.filter(user__isnull=False).count()
+        without_user = TextAnalysis.objects.filter(user__isnull=True).count()
+        total_users = User.objects.count()
+        
+        # Get recent analyses
+        recent = []
+        for a in TextAnalysis.objects.order_by('-created_at')[:10]:
+            recent.append({
+                'id': str(a.id),
+                'user': a.user.username if a.user else 'None',
+                'prediction': a.prediction,
+                'confidence': a.confidence_score,
+                'created_at': a.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            })
+        
+        # Get user stats
+        user_stats = []
+        for u in User.objects.all():
+            user_stats.append({
+                'username': u.username,
+                'analyses_count': TextAnalysis.objects.filter(user=u).count()
+            })
+        
+        return Response({
+            'database': 'Production (Render PostgreSQL)',
+            'stats': {
+                'total_analyses': total_analyses,
+                'with_user': with_user,
+                'without_user': without_user,
+                'total_users': total_users
+            },
+            'recent_analyses': recent,
+            'user_analysis_counts': user_stats
+        })
+        
+    except Exception as e:
+        return Response({
+            'error': str(e)
+        }, status=500)
