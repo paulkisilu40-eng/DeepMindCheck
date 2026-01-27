@@ -335,6 +335,15 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Get user-specific storage keys
+        {% if user.is_authenticated %}
+        const PROGRESS_KEY = 'wellnessProgress_{{ user.id }}';
+        const MOOD_KEY = 'currentMood_{{ user.id }}';
+        {% else %}
+        const PROGRESS_KEY = 'wellnessProgress_guest';
+        const MOOD_KEY = 'currentMood_guest';
+        {% endif %}
+
         // Load saved progress from localStorage
         loadProgress();
 
@@ -363,14 +372,14 @@
                 this.classList.add('selected');
 
                 const mood = this.dataset.mood;
-                localStorage.setItem('currentMood', mood);
+                localStorage.setItem(MOOD_KEY, mood);
 
                 showMessage('Mood saved! 😊');
             });
         });
 
         // Load saved mood
-        const savedMood = localStorage.getItem('currentMood');
+        const savedMood = localStorage.getItem(MOOD_KEY);
         if (savedMood) {
             const moodBtn = document.querySelector(`[data-mood="${savedMood}"]`);
             if (moodBtn) moodBtn.classList.add('selected');
@@ -430,7 +439,6 @@
         // Download PDF button
         document.getElementById('downloadPdfBtn').addEventListener('click', function () {
             alert('PDF download feature coming soon! Your progress has been saved locally.');
-            // TODO: Implement PDF generation endpoint when needed
         });
 
         function updateDayProgress(dayNumber) {
@@ -478,11 +486,11 @@
                 progress[key] = checkbox.checked;
             });
 
-            localStorage.setItem('wellnessProgress', JSON.stringify(progress));
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
         }
 
         function loadProgress() {
-            const saved = localStorage.getItem('wellnessProgress');
+            const saved = localStorage.getItem(PROGRESS_KEY);
             if (!saved) return;
 
             const progress = JSON.parse(saved);
