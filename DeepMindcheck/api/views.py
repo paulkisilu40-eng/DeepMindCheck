@@ -297,8 +297,8 @@ def get_crisis_resources():
     return {
         'message': '⚠️ We noticed you might be going through a difficult time. Please reach out for help.',
         'hotlines': [
-            {'name': 'National Suicide Prevention Lifeline (US)', 'number': '988', 'available': '24/7'},
-            {'name': 'Crisis Text Line', 'number': 'Text HOME to 741741', 'available': '24/7'},
+            {'name': 'National Suicide Prevention Lifeline ', 'number': '911', 'available': '24/7'},
+            {'name': 'DKUT Text Line', 'number': 'Text HOME to 741741', 'available': '24/7'},
             {'name': 'International Association for Suicide Prevention', 'url': 'https://www.iasp.info/resources/Crisis_Centres/'},
         ],
         'immediate_actions': [
