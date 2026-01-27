@@ -145,7 +145,8 @@ def test_view(request):
 
 def wellness_plan_view(request):
     """Generate and display personalized wellness plan"""
-    from wellness_plans import generate_wellness_plan
+    # from wellness_plans import generate_wellness_plan
+    from .wellness_plans import generate_wellness_plan
     
     # Get params from session or request
     mental_state = request.GET.get('state', 'neutral')
