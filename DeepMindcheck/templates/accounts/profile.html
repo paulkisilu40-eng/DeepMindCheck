@@ -1,101 +1,222 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}Profile - {{ user.username }} - DeepMindCheck{% endblock %}
+{% block title %}{{ user.username }}'s Dashboard - DeepMindCheck{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 12px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: #718096;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .recent-analyses {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .analysis-item {
+        padding: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .analysis-item:last-child {
+        border-bottom: none;
+    }
+
+    .analysis-item:hover {
+        background: #f7fafc;
+    }
+
+    .prediction-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .prediction-neutral {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .prediction-depression {
+        background: #fed7aa;
+        color: #7c2d12;
+    }
+
+    .prediction-anxiety {
+        background: #fef3c7;
+        color: #78350f;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #718096;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-lg-4 mb-4">
-            <!-- Profile Card -->
-            <div class="glass-card p-4 text-center">
-                {% if profile.avatar %}
-                    <img src="{{ profile.avatar.url }}" alt="{{ user.username }}" 
-                         class="rounded-circle mb-3" width="120" height="120">
-                {% else %}
-                    <div class="feature-icon icon-primary mb-3 mx-auto" style="width: 120px; height: 120px; font-size: 3rem;">
-                        <i class="fas fa-user"></i>
-                    </div>
-                {% endif %}
-                
-                <h4 class="fw-bold mb-2">{{ user.get_full_name|default:user.username }}</h4>
-                <p class="text-muted mb-3">{{ profile.bio|default:"Mental health awareness advocate" }}</p>
-                
-                <div class="row text-center">
-                    <div class="col-6 mb-2">
-                        <div class="fw-bold text-primary">{{ user_stats.total_analyses }}</div>
-                        <small class="text-muted">Analyses</small>
-                    </div>
-                    <div class="col-6 mb-2">
-                        <div class="fw-bold text-success">{{ user_stats.avg_confidence|floatformat:1 }}%</div>
-                        <small class="text-muted">Avg Confidence</small>
-                    </div>
-                </div>
-                
-                <div class="mt-3">
-                    <div class="fw-bold text-warning">{{ user_stats.feedback_given }}</div>
-                    <small class="text-muted">Feedback Given</small>
-                </div>
-                
-                <hr>
-                
-                <div class="text-muted small">
-                    <i class="fas fa-calendar me-1"></i>
-                    Joined {{ profile.joined_date|date:"F Y" }}
-                </div>
-            </div>
+<div class="container py-4">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header text-center">
+        <h1 class="display-4 fw-bold mb-2">Welcome, {{ user.username }}! 👋</h1>
+        <p class="lead mb-0">Your Mental Wellness Dashboard</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number text-primary">{{ user_stats.total_analyses }}</div>
+            <div class="stat-label">Total Analyses</div>
         </div>
-        
-        <div class="col-lg-8">
-            <!-- Recent Analyses -->
-            <div class="glass-card p-4">
-                <h4 class="mb-4">
-                    <i class="fas fa-history text-primary me-2"></i>Recent Analyses
-                </h4>
-                
-                {% if recent_analyses %}
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Prediction</th>
-                                    <th>Confidence</th>
-                                    <th>Model</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for analysis in recent_analyses %}
-                                <tr>
-                                    <td>{{ analysis.created_at|date:"M d, Y H:i" }}</td>
-                                    <td>
-                                        <span class="badge bg-primary">{{ analysis.prediction|title }}</span>
-                                    </td>
-                                    <td>{{ analysis.confidence_percentage }}%</td>
-                                    <td>{{ analysis.model_used|title }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <a href="{% url 'analyze' %}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>New Analysis
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="text-center py-5">
-                        <i class="fas fa-brain fa-3x text-muted mb-3"></i>
-                        <h5>No analyses yet</h5>
-                        <p class="text-muted">Start your mental health journey with your first text analysis.</p>
-                        <a href="{% url 'analyze' %}" class="btn btn-primary">
-                            <i class="fas fa-brain me-2"></i>Start Analysis
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
+
+        <div class="stat-card">
+            <div class="stat-number text-success">{{ user_stats.avg_confidence|floatformat:1 }}%</div>
+            <div class="stat-label">Avg Confidence</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number text-warning">{{ user_stats.feedback_given }}</div>
+            <div class="stat-label">Feedback Given</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number text-info">{{ recent_analyses|length }}</div>
+            <div class="stat-label">Recent Sessions</div>
         </div>
     </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <a href="{% url 'analyze' %}" class="btn btn-primary btn-lg w-100 py-3">
+                <i class="fas fa-brain me-2"></i>Start New Analysis
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a href="{% url 'wellness_plan' %}?state=neutral&confidence=0.8" class="btn btn-success btn-lg w-100 py-3">
+                <i class="fas fa-calendar-check me-2"></i>View Wellness Plan
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Analyses -->
+    <div class="recent-analyses">
+        <h3 class="mb-4">
+            <i class="fas fa-history me-2 text-primary"></i>Recent Analyses
+        </h3>
+
+        {% if recent_analyses %}
+            {% for analysis in recent_analyses %}
+            <div class="analysis-item">
+                <div>
+                    <div class="mb-1">
+                        <span class="prediction-badge prediction-{{ analysis.prediction }}">
+                            {{ analysis.prediction|title }}
+                        </span>
+                    </div>
+                    <small class="text-muted">
+                        <i class="far fa-clock me-1"></i>
+                        {{ analysis.created_at|date:"F d, Y - g:i A" }}
+                    </small>
+                    <div class="mt-1">
+                        <small class="text-muted">
+                            "{{ analysis.text_input|truncatewords:15 }}"
+                        </small>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="fw-bold text-success">{{ analysis.confidence_percentage }}%</div>
+                    <small class="text-muted">Confidence</small>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if user_stats.total_analyses > 10 %}
+            <div class="text-center mt-3">
+                <a href="#" class="btn btn-outline-primary">View All Analyses</a>
+            </div>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-chart-line"></i>
+                <h5>No analyses yet</h5>
+                <p class="text-muted mb-3">Start your mental wellness journey today!</p>
+                <a href="{% url 'analyze' %}" class="btn btn-primary">
+                    <i class="fas fa-brain me-2"></i>Start Your First Analysis
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Prediction Distribution -->
+    {% if prediction_counts %}
+    <div class="recent-analyses mt-4">
+        <h3 class="mb-4">
+            <i class="fas fa-chart-pie me-2 text-primary"></i>Your Mental State Distribution
+        </h3>
+        <div class="row">
+            {% for pred in prediction_counts %}
+            <div class="col-md-4 mb-3">
+                <div class="text-center p-3 rounded" style="background: #f7fafc;">
+                    <div class="stat-number text-{{ pred.prediction }}">{{ pred.count }}</div>
+                    <div class="stat-label">{{ pred.prediction|title }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
